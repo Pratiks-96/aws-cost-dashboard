@@ -1,0 +1,20 @@
+backend:
+  image:
+    repository: pratik6958/aws-cost-backend
+    tag: latest
+  service:
+    type: NodePort
+    port: 8000
+    nodePort: 30007
+
+frontend:
+  image:
+    repository: pratik6958/aws-cost-frontend
+    tag: latest
+  service:
+    type: NodePort
+    port: 80
+    nodePort: 30080
+
+prometheus:
+  enabled: true
