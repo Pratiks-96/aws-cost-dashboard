@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: aws-cost-frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: aws-cost-frontend
+  template:
+    metadata:
+      labels:
+        app: aws-cost-frontend
+    spec:
+      containers:
+        - name: frontend
+          image: "{{ .Values.frontend.image.repository }}:{{ .Values.frontend.image.tag }}"
+          ports:
+            - containerPort: 80
