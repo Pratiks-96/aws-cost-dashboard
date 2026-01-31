@@ -1,0 +1,14 @@
+{{- if .Values.prometheus.enabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: aws-cost-backend
+spec:
+  selector:
+    matchLabels:
+      app: aws-cost-backend
+  endpoints:
+    - port: http
+      path: /metrics
+      interval: 30s
+{{- end }}
