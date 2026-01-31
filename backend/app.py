@@ -1,4 +1,5 @@
 from fastapi import FastAPI, HTTPException, Request
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import boto3
 from datetime import datetime, timedelta
@@ -6,12 +7,14 @@ from prometheus_client import Counter, Histogram, generate_latest, CONTENT_TYPE_
 
 app = FastAPI()
 
+# Enable CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=["*"],  # allow all origins for now
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
+)
 
 # Prometheus metrics
 REQUEST_COUNT = Counter("aws_dashboard_requests_total", "Total API requests", ["endpoint"])
