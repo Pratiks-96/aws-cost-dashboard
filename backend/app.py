@@ -6,6 +6,13 @@ from prometheus_client import Counter, Histogram, generate_latest, CONTENT_TYPE_
 
 app = FastAPI()
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+
 # Prometheus metrics
 REQUEST_COUNT = Counter("aws_dashboard_requests_total", "Total API requests", ["endpoint"])
 REQUEST_LATENCY = Histogram("aws_dashboard_request_latency_seconds", "Request latency", ["endpoint"])
