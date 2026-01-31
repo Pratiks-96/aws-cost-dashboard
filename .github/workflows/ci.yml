@@ -1,0 +1,72 @@
+name: CI Pipeline - GenAI DevOps Platform
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    # -----------------------
+    # AI Service
+    # -----------------------
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+
+    - name: Install AI service dependencies
+      working-directory: ai-service
+      run: |
+        pip install -r requirements.txt
+
+    - name: Run AI service tests (placeholder)
+      working-directory: ai-service
+      run: |
+        echo "Run tests here"
+
+    - name: Build AI service Docker image
+      run: |
+        docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/aws-cost-frontend:latest aws-cost-frontend/
+
+    # -----------------------
+    # Bot Service
+    # -----------------------
+    - name: Install bot service dependencies
+      working-directory: aws-cost-backend
+      run: |
+        pip install -r requirements.txt
+
+    - name: Run bot service tests (placeholder)
+      working-directory: bot-service
+      run: |
+        echo "Run tests here"
+
+    - name: Build bot service Docker image
+      run: |
+        docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/aws-cost-backend:latest aws-cost-backend/
+
+    # -----------------------
+    # Docker Login
+    # -----------------------
+    - name: Log in to Docker Hub
+      uses: docker/login-action@v3
+      with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+    - name: Push Docker images
+      run: |
+        docker push ${{ secrets.DOCKERHUB_USERNAME }}/aws-cost-backend:latest
+        docker push ${{ secrets.DOCKERHUB_USERNAME }}/aws-cost-frontend:latest
+
+
+
+ 
