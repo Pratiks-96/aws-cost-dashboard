@@ -6,7 +6,7 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/pratik-96/aws-cost-dashboard.git
+    repoURL: https://github.com/Pratiks-96/aws-cost-dashboard.git
     targetRevision: main
     path: helm
     helm:
