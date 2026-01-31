@@ -1,0 +1,21 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: aws-cost-dashboard
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/pratik-96/aws-cost-dashboard.git
+    targetRevision: main
+    path: helm
+    helm:
+      valueFiles:
+        - values.yaml
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: aws-monitoring
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
