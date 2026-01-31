@@ -23,7 +23,9 @@
   <canvas id="costChart" width="400" height="200"></canvas>
 
   <script>
-    const apiBase = "http://localhost:8000";
+    // IMPORTANT: Must match your port-forward command
+    const apiBase = "http://localhost:8081";
+
     let resourceChart = null;
     let costChart = null;
 
@@ -34,15 +36,24 @@
         region: document.getElementById("region").value || "us-east-1"
       };
 
-      const res = await fetch(`${apiBase}/resources`, {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify(body)
-      });
+      try {
+        const res = await fetch(`${apiBase}/resources`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(body)
+        });
 
-      const data = await res.json();
-      document.getElementById("output").innerText = JSON.stringify(data, null, 2);
-      renderResourceChart(data);
+        if (!res.ok) {
+          const err = await res.text();
+          throw new Error(err);
+        }
+
+        const data = await res.json();
+        document.getElementById("output").innerText = JSON.stringify(data, null, 2);
+        renderResourceChart(data);
+      } catch (error) {
+        document.getElementById("output").innerText = "Error: " + error.message;
+      }
     }
 
     async function getCost() {
@@ -52,15 +63,24 @@
         region: document.getElementById("region").value || "us-east-1"
       };
 
-      const res = await fetch(`${apiBase}/cost`, {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify(body)
-      });
+      try {
+        const res = await fetch(`${apiBase}/cost`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(body)
+        });
 
-      const data = await res.json();
-      document.getElementById("output").innerText = JSON.stringify(data, null, 2);
-      renderCostChart(data);
+        if (!res.ok) {
+          const err = await res.text();
+          throw new Error(err);
+        }
+
+        const data = await res.json();
+        document.getElementById("output").innerText = JSON.stringify(data, null, 2);
+        renderCostChart(data);
+      } catch (error) {
+        document.getElementById("output").innerText = "Error: " + error.message;
+      }
     }
 
     function renderResourceChart(data) {
